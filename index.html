@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Connect</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+     <div class="container">
+        <div class="header">
+            <h1>📅 MedRemind Pro</h1>
+            <p>Advanced Appointment Reminder System for Healthcare Providers</p>
+            <button id="themeToggle" title="Toggle theme">🌙</button>
+            <button id="hamburger" class="hamburger" title="Menu">&#9776;</button>
+        </div>
+
+        <div class="nav-tabs-container">
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="showTab('appointments')">Appointments</button>
+                <button class="nav-tab" onclick="showTab('patients')">Patients</button>
+                <button class="nav-tab" onclick="showTab('reminders')">Reminders</button>
+                <button class="nav-tab" onclick="showTab('analytics')">Analytics</button>
+            </div>
+        </div>
+
+        <!-- Appointments Tab -->
+        <div id="appointments" class="tab-content active">
+            <h2>Schedule New Appointment</h2>
+            <form id="appointmentForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Patient</label>
+                        <select id="patientSelect" required>
+                            <option value="">Select Patient</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Doctor</label>
+                        <input type="text" id="doctorName" placeholder="Dr. Smith" required>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="appointmentDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Time</label>
+                        <input type="time" id="appointmentTime" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Appointment Type</label>
+                    <select id="appointmentType">
+                        <option value="consultation">Consultation</option>
+                        <option value="followup">Follow-up</option>
+                        <option value="checkup">Check-up</option>
+                        <option value="procedure">Procedure</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="appointmentNotes" placeholder="Additional notes or instructions"></textarea>
+                </div>
+                <button type="submit" class="btn">Schedule Appointment</button>
+            </form>
+
+            <div class="appointments-list">
+                <h3>Upcoming Appointments</h3>
+                <div id="appointmentsList"></div>
+            </div>
+        </div>
+
+        <!-- Patients Tab -->
+        <div id="patients" class="tab-content">
+            <h2>Add New Patient</h2>
+            <form id="patientForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="patientName" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="patientPhone" placeholder="+1234567890" required>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="patientEmail" placeholder="john@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>WhatsApp Number</label>
+                        <input type="tel" id="patientWhatsApp" placeholder="+1234567890">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Preferred Communication</label>
+                    <div class="channel-selector">
+                        <label class="channel-option">
+                            <input type="checkbox" name="commChannel" value="sms"> SMS
+                        </label>
+                        <label class="channel-option">
+                            <input type="checkbox" name="commChannel" value="email"> Email
+                        </label>
+                        <label class="channel-option">
+                            <input type="checkbox" name="commChannel" value="whatsapp"> WhatsApp
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn">Add Patient</button>
+            </form>
+
+            <div class="appointments-list">
+                <h3>Patient Directory</h3>
+                <div id="patientsList"></div>
+            </div>
+        </div>
+
+        <!-- Reminders Tab -->
+        <div id="reminders" class="tab-content">
+            <h2>Reminder Settings</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Default Reminder Time</label>
+                    <select id="reminderTime">
+                        <option value="24">24 hours before</option>
+                        <option value="12">12 hours before</option>
+                        <option value="6">6 hours before</option>
+                        <option value="2">2 hours before</option>
+                        <option value="1">1 hour before</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Auto-send Reminders</label>
+                    <select id="autoReminders">
+                        <option value="true">Enabled</option>
+                        <option value="false">Manual Only</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Custom Message Template</label>
+                <textarea id="messageTemplate" placeholder="Hi {patientName}, this is a reminder for your appointment with {doctorName} on {date} at {time}. Please confirm your attendance.">Hi {patientName}, this is a reminder for your appointment with {doctorName} on {date} at {time}. Please confirm your attendance.</textarea>
+            </div>
+
+            <button class="btn btn-success" onclick="sendAllReminders()">Send All Pending Reminders</button>
+            <button class="btn" onclick="testReminder()">Send Test Reminder</button>
+
+            <div class="notification-log">
+                <h3>Notification Log</h3>
+                <div id="notificationLog"></div>
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div id="analytics" class="tab-content">
+            <h2>System Analytics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalAppointments">0</div>
+                    <div class="stat-label">Total Appointments</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalPatients">0</div>
+                    <div class="stat-label">Registered Patients</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="remindersSent">0</div>
+                    <div class="stat-label">Reminders Sent</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="successRate">0%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+            </div>
+
+            <div class="appointments-list">
+                <h3>Recent Activity</h3>
+                <div id="recentActivity"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Modal -->
+    <div id="testModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>Test Reminder</h3>
+            <p>Select a communication channel to test:</p>
+            <div class="channel-selector">
+                <label class="channel-option">
+                    <input type="radio" name="testChannel" value="sms"> SMS
+                </label>
+                <label class="channel-option">
+                    <input type="radio" name="testChannel" value="email"> Email
+                </label>
+                <label class="channel-option">
+                    <input type="radio" name="testChannel" value="whatsapp"> WhatsApp
+                </label>
+            </div>
+            <button class="btn" onclick="executeTestReminder()">Send Test</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
