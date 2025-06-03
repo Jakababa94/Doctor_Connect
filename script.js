@@ -1,3 +1,72 @@
+// Authentication Functions
+function showAuthTab(tabName) {
+    // Hide all auth forms
+    document.querySelectorAll('.auth-form').forEach(form => {
+        form.classList.remove('active');
+    });
+    
+    // Show selected form
+    document.getElementById(tabName + 'Form').classList.add('active');
+    
+    // Update tab buttons
+    if (tabName !== 'forgotPassword') {
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.querySelector(`.auth-tab[onclick="showAuthTab('${tabName}')"]`).classList.add('active');
+    }
+}
+
+function handleLogin(event) {
+    event.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    // Here you would typically make an API call to verify credentials
+    // For demo purposes, we'll just show the main app
+    document.getElementById('authModal').classList.remove('active');
+    document.querySelector('.container').style.display = 'block';
+}
+
+function handleSignup(event) {
+    event.preventDefault();
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    const confirmPassword = document.getElementById('signupConfirmPassword').value;
+
+    if (password !== confirmPassword) {
+        alert('Passwords do not match!');
+        return;
+    }
+
+    // Here you would typically make an API call to create the account
+    // For demo purposes, we'll just switch to the login form
+    showAuthTab('login');
+    alert('Account created successfully! Please login.');
+}
+
+function handleForgotPassword(event) {
+    event.preventDefault();
+    const email = document.getElementById('resetEmail').value;
+
+    // Here you would typically make an API call to send a reset link
+    // For demo purposes, we'll just show a success message
+    alert('If an account exists with this email, you will receive a password reset link shortly.');
+    showAuthTab('login');
+}
+
+// Check if user is already logged in
+function checkAuth() {
+    // Here you would typically check for a valid session/token
+    // For demo purposes, we'll always show the auth modal
+    document.getElementById('authModal').classList.add('active');
+    document.querySelector('.container').style.display = 'none';
+}
+
+// Call checkAuth when the page loads
+document.addEventListener('DOMContentLoaded', checkAuth);
+
 // Data storage (in production, this would be a database)
         let patients = JSON.parse(localStorage.getItem('patients')) || [];
         let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
